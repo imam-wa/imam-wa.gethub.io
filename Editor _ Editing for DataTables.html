@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://editor.datatables.net/ -->
+<html lang="en" class="light" data-bs-theme="light" data-theme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		<title>Editor | Editing for DataTables</title>
+		
+		<link rel="shortcut icon" type="image/png" href="https://editor.datatables.net/media/images/favicon.png">
+		<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://www.datatables.net/rss.xml">
+
+		<link rel="stylesheet" type="text/css" href="./Editor _ Editing for DataTables_files/site.css">
+		<link rel="stylesheet" href="./Editor _ Editing for DataTables_files/datatables.min.css"><link rel="stylesheet" href="./Editor _ Editing for DataTables_files/editor.dataTables.min.css">
+		<style>
+			
+div.fw-container div.fw-body div.content {
+	margin-top: 5em;
+}
+
+div.fw-body h1 {
+	display: none;
+}
+
+.center {
+	text-align: center;
+}
+
+body.hero div.nav-main {
+	margin-top: 5.5em !important;
+}
+
+div.dataTables_filter {
+    padding-top: 7px;
+}
+	
+		</style>
+
+		<script src="./Editor _ Editing for DataTables_files/site.js.download" data-domain="editor.datatables.net" data-api="https://analytics.datatables.net/api/event"></script>
+		<script src="./Editor _ Editing for DataTables_files/dynamic.php" async=""></script>
+		<script src="./Editor _ Editing for DataTables_files/datatables.min.js.download"></script><script src="./Editor _ Editing for DataTables_files/dataTables.editor.min.js.download"></script>
+		<script class="init">
+			dt_demo.init();
+
+			
+	
+
+$(document).ready(function() {
+    var editor = new DataTable.Editor( {
+        ajax: "/examples/php/staff.php",
+        table: "#example",
+        fields: [ {
+                label: "First name:",
+                name: "first_name"
+            }, {
+                label: "Last name:",
+                name: "last_name"
+            }, {
+                label: "Position:",
+                name: "position"
+            }, {
+                label: "Office:",
+                name: "office"
+            }, {
+                label: "Extension:",
+                name: "extn"
+            }, {
+                label: "Start date:",
+                name: "start_date",
+                type: "datetime"
+            }, {
+                label: "Salary:",
+                name: "salary"
+            }
+        ]
+    } );
+
+    $('#example').on( 'click', 'tbody.inline td:not(.select-checkbox,.control,.child), tbody.inline li span.dtr-data', function (e) {
+        editor.inline( this, {
+			onBlur: 'submit'
+		} );
+    } );
+
+    $('#example').on( 'click', 'tbody.bubble td:not(.select-checkbox,.control,.child), tbody.bubble li span.dtr-data', function (e) {
+        editor.bubble( this );
+    } );
+ 
+    var table = $('#example').DataTable( {
+        dom: "Bfrtip",
+        ajax: "/examples/php/staff.php",
+		order: [[2, 'asc']],
+        columns: [
+			{
+				orderable: false,
+				className: 'select-checkbox',
+				targets:   0,
+				visible:   false,
+				data: null,
+				defaultContent: ''
+			},
+			{
+				className: 'control',
+				orderable: false,
+				targets:   0,
+				data: null,
+				defaultContent: ''
+			},
+            {
+				data: null,
+				render: function ( data, type, row ) {
+					return data.first_name+' '+data.last_name;
+				},
+				editField: [ 'first_name', 'last_name' ]
+			},
+			{ data: "first_name", visible: false },
+			{ data: "last_name", visible: false },
+            { data: "position" },
+            { data: "office" },
+            { data: "start_date" },
+            { data: "salary", render: $.fn.dataTable.render.number( ',', '.', 0, '$' ) }
+        ],
+        responsive: {
+            details: {
+                type: 'column',
+				target: 1
+            }
+        },
+		pagingType: 'simple',
+        select: true,
+        buttons: [
+            { extend: "create", editor: editor },
+            { extend: "edit",   editor: editor },
+            { extend: "remove", editor: editor }
+        ]
+    } );
+
+	$('div.slider div.item').click( function () {
+		if ( $(this).hasClass('active') ) {
+			return;
+		}
+
+		$('div.slider div.item.active').removeClass('active');
+		$(this).addClass('active');
+
+		if ( $(this).find('strong').hasClass('full') ) {
+			$('#example tbody')
+				.removeClass('bubble inline')
+				.addClass('full');
+			
+			table.columns( [ 2 ] ).visible( true );
+			table.columns( [ 0, 3, 4 ] ).visible( false );
+			table.select.selector( 'td' );
+		}
+		else if ( $(this).find('strong').hasClass('bubble') ) {
+			$('#example tbody')
+				.removeClass('full inline')
+				.addClass('bubble');
+			
+			table.columns( [ 0, 2 ] ).visible( true );
+			table.columns( [ 3, 4 ] ).visible( false );
+			table.select.selector( 'td:first-child' );
+		}
+		else {
+			$('#example tbody')
+				.removeClass('bubble full')
+				.addClass('inline');
+			
+			table.columns( [ 0, 3, 4 ] ).visible( true );
+			table.columns( [ 2 ] ).visible( false );
+			table.select.selector( 'td:first-child' );
+		}
+	} );
+} );
+
+	
+	
+		</script>
+	</head>
+	<body class="editor wide hero index">
+		<a name="top"></a>
+
+		<div class="fw-background">
+			<div>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+
+		<div class="fw-container">
+			<div class="fw-header">
+				<div class="nav-wrapper">
+					<div class="nav-master">
+						<div class="nav-item">
+							<a href="https://datatables.net/">
+								<span class="icon-dt"></span>
+								<span>DataTables</span>
+								<div class="nav-explain">
+									Advanced interaction<br>features for your tables.
+								</div>
+							</a>
+						</div>
+						<div class="nav-item active">
+							<a href="https://editor.datatables.net/">
+								<span class="icon-e"></span>
+								<span>Editor</span>
+								<div class="nav-explain">
+									Comprehensive editing<br>library for DataTables.
+								</div>
+							</a>
+						</div>
+					</div>
+
+					<div class="nav-search">
+						<div class="nav-item i-manual">
+							<a href="https://editor.datatables.net/manual">Manual</a>
+						</div>
+						<div class="nav-item i-download">
+							<a href="https://editor.datatables.net/download">Download</a>
+						</div>
+						<div class="nav-item i-user"><a href="https://editor.datatables.net/" class="register-action follow-link login">Login / Register</a></div>
+						<div class="nav-item search">
+							<form action="https://editor.datatables.net/q/" method="GET">
+								<input type="text" name="q" placeholder="Search . . ." autocomplete="off"><div class="search-clear" style="visibility: hidden;">×</div>
+							</form>
+						</div>
+						<div class="nav-item dt-demo-options"><div class="dt-demo-selector"><div class="dt-demo-selector__current"><i class="dt-demo-icon theme light"></i></div><div class="dt-demo-selector__options"><div class="dt-demo-selector__title">Colour scheme<p><a href="https://datatables.net/tn/20#Theme">What is this?</a></p></div><div class="dt-demo-selector__option selected" data-val="auto"><i class="dt-demo-icon auto"></i><span>Auto</span></div><div class="dt-demo-selector__option" data-val="light"><i class="dt-demo-icon light"></i><span>Light</span></div><div class="dt-demo-selector__option" data-val="dark"><i class="dt-demo-icon dark"></i><span>Dark</span></div></div></div></div>
+					</div>
+				</div>
+				<div class="nav-ad">
+					<div data-ea-publisher="datatablesnet" data-ea-type="image" data-ea-manual="true"></div>
+				</div>
+			</div>
+
+			<div class="fw-hero">
+				<h1 data-anchor="Create-customised,-fully-editable-tablesin-minutes-with-Editor-for-DataTables"><a name="Create-customised,-fully-editable-tablesin-minutes-with-Editor-for-DataTables" href="https://editor.datatables.net/#Create-customised,-fully-editable-tablesin-minutes-with-Editor-for-DataTables"></a>Create customised, fully editable tables<br><i>in minutes</i> with Editor for DataTables</h1>
+
+<p class="center editing-modes" style="opacity: 0.75;">
+    Editor adds three editing modes to suit any kind of application
+    <span class="icon i-arrow-down"></span>
+</p>
+
+<div class="grid"><div class="unit w-3-4"><div class="hero-callout">
+    <div id="example_wrapper" class="dataTables_wrapper"><div class="dt-buttons">   <button class="dt-button buttons-create" tabindex="0" aria-controls="example" type="button"><span>New</span></button> <button class="dt-button buttons-selected buttons-edit" tabindex="0" aria-controls="example" type="button"><span>Edit</span></button> <button class="dt-button buttons-selected buttons-remove" tabindex="0" aria-controls="example" type="button"><span>Delete</span></button> </div><div id="example_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="example"></label></div><table id="example" class="display nowrap dataTable dtr-column" style="width: 100%;" aria-describedby="example_info">
+            <thead>
+                <tr><th class="control sorting_disabled dtr-hidden" rowspan="1" colspan="1" style="width: 0px; display: none;" aria-label=""></th><th class="sorting sorting_desc" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 137px;" aria-label="Name: activate to sort column ascending" aria-sort="descending">Name</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 211px;" aria-label="Position: activate to sort column ascending">Position</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 100px;" aria-label="Office: activate to sort column ascending">Office</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 103px;" aria-label="Start date: activate to sort column ascending">Start date</th><th class="sorting" tabindex="0" aria-controls="example" rowspan="1" colspan="1" style="width: 73px;" aria-label="Salary: activate to sort column ascending">Salary</th></tr>
+            </thead>
+            <tfoot>
+                <tr><th class="control dtr-hidden" rowspan="1" colspan="1" style="display: none;"></th><th rowspan="1" colspan="1">Name</th><th rowspan="1" colspan="1">Position</th><th rowspan="1" colspan="1">Office</th><th rowspan="1" colspan="1">Start date</th><th rowspan="1" colspan="1">Salary</th></tr>
+            </tfoot>
+            <tbody><tr id="row_49" class="odd selected"><td class="  control" tabindex="0" style="display: none;"></td><td class="sorting_1">NAMA NO SKM</td><td>NO RM</td><td>RUANGAN</td><td></td><td></td></tr><tr id="row_48" class="even"><td class="  control" tabindex="0" style="display: none;"></td><td class="sorting_1">NAMA NO SKM</td><td>NO RM</td><td>RUANGAN</td><td></td><td></td></tr></tbody>
+        </table><div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing 1 to 2 of 2 entries<span class="select-info"><span class="select-item">1 row selected</span><span class="select-item"></span><span class="select-item"></span></span></div><div class="dataTables_paginate paging_simple" id="example_paginate"><a class="paginate_button previous disabled" aria-controls="example" aria-disabled="true" role="link" data-dt-idx="previous" tabindex="-1" id="example_previous">Previous</a><a class="paginate_button next disabled" aria-controls="example" aria-disabled="true" role="link" data-dt-idx="next" tabindex="-1" id="example_next">Next</a></div></div>
+</div></div>
+
+<div class="unit w-1-4"><div class="slider">
+    <div class="item active">
+        <strong class="full"><span class="i"></span>Full row editing</strong>
+        <p>The entire row in a DataTable can be easily edited in Editor using the main editing interface. The form display can be fully customised using display controllers.</p>
+    </div>
+    <div class="item">
+        <strong class="bubble"><span class="i"></span>Bubble editing</strong>
+        <p>A single field, or multiple fields can be edited very quickly in a bubble by simply clicking on the cell in the table to edit. You have full control over the form display, buttons and user interaction.</p>
+    </div>
+    <div class="item">
+        <strong class="inline"><span class="i"></span>Inline editing</strong>
+        <p>For simple fields nothing can be quicker than simply clicking on the cell, typing the changes you want and hitting return. All inside the DataTable cell!</p>
+    </div>
+</div></div></div>
+
+			</div>
+
+			<div class="fw-nav">
+				<div class="nav-main">
+					<ul><li class=""><a href="https://editor.datatables.net/examples/index">Examples</a></li><li class=" sub"><a href="https://editor.datatables.net/manual/index">Manual</a></li><li class=" sub"><a href="https://editor.datatables.net/reference/index">Reference</a></li><li class=""><a href="https://editor.datatables.net/generator/index">Generator</a></li><li class=" sub"><a href="https://editor.datatables.net/plug-ins/index">Plug-ins</a></li><li class=""><a href="https://datatables.net/blog">Blog</a></li><li class=""><a href="https://datatables.net/forums">Forums</a></li><li class=""><a href="https://editor.datatables.net/contact/index">Contact</a></li><li class=""><a href="https://editor.datatables.net/support/index">Support</a></li><li class=""><a href="https://editor.datatables.net/download/index">Download</a></li><li class=""><a href="https://editor.datatables.net/purchase/index">Purchase</a></li></ul>
+				</div>
+
+				<div class="mobile-show">
+					<a><i>Show site navigation</i></a>
+				</div>
+			</div>
+
+			<div class="fw-body">
+				<div class="content">
+					
+					<h1 class="page_title">Editor <span>Editing for DataTables</span></h1>
+
+					
+	
+
+<h2 class="index-callout">Save time, do more</h2>
+
+<p class="callout">Save your time writing yet another CRUD application - Editor is a premium extension created to produce complex, fully editable tables that take full advantages of all the features of DataTables.</p>
+
+<p class="center">
+	<a href="https://editor.datatables.net/download" class="site-btn btn-inline btn-pill">
+		Start A Free 15 Day Trial
+	</a>
+</p>
+
+<div class="index-features self-clear">
+	<div class="feature">
+		<div class="feature-icon multiRow"> </div>
+		<div class="title"><a href="https://editor.datatables.net/examples/simple/multiRow">Multi-row editing</a></div>
+		<div class="subtext">It's easy to select several rows and edit them all at once.</div>
+	</div>
+
+	<div class="feature">
+		<div class="feature-icon responsive"> </div>
+		<div class="title">Fully responsive</div>
+		<div class="subtext">Editor works perfectly on desktop, tablet and mobile devices..</div>
+	</div>
+
+	<div class="feature">
+		<div class="feature-icon docs"> </div>
+		<div class="title">Comprehensive <a href="https://editor.datatables.net/manual">documentation</a></div>
+		<div class="subtext">Solid, complete and intelligible documentation that you can count on.</div>
+	</div>
+
+	<div class="feature">
+		<div class="feature-icon support"> </div>
+		<div class="title">Support</div>
+		<div class="subtext">
+			We have a full range of <a href="https://editor.datatables.net/support">support</a> options to suit all business types.
+		</div>
+	</div>
+
+	<div class="feature">
+		<div class="feature-icon theme"> </div>
+		<div class="title">Styling</div>
+		<div class="subtext">
+			Full integration styles for
+			<a href="https://editor.datatables.net/examples/styling/bootstrap">Bootstrap 3</a>/<a href="https://editor.datatables.net/examples/styling/bootstrap4">4</a>,
+			<a href="https://editor.datatables.net/examples/styling/foundation">Foundation</a> and
+			<a href="https://editor.datatables.net/examples/styling/semanticui">Semantic UI</a>.
+		</div>
+	</div>
+
+	<div class="feature">
+		<div class="feature-icon plugins"> </div>
+		<div class="title"><a href="https://editor.datatables.net/plug-ins">Plug-ins</a></div>
+		<div class="subtext">
+			Extend Editor with more complex controls, or create <a href="https://editor.datatables.net/manual/development/field-types">custom field types</a>.
+		</div>
+	</div>
+</div>
+
+		<blockquote style="margin-top: 1em">
+			<h4>“DataTables Editor out of the box looks professional, even with all the default settings - this is a serious piece of software.”</h4>
+			<p>Mark, Birders Online</p>
+		</blockquote>
+
+		<div style="margin: 5em 0;">
+			<img src="./Editor _ Editing for DataTables_files/platforms.svg" alt="PHP, .NET and NodeJS" class="used-by dark-shade">
+
+			<p style="width: 85%; text-align: center; margin: 0 auto; clear:both; padding-top: 1em;">Editor comes with a set of comprehensive libraries for <a href="https://editor.datatables.net/manual/php">PHP</a>, <a href="https://editor.datatables.net/manual/net">.NET</a> and <a href="https://editor.datatables.net/manual/nodejs">NodeJS</a> that provide everything needed on the server-side for your tables and to act on edits by users. These libraries provide data validation, formatting options and easy join tables abilities. In short, everything needed for a complete editable table!</p>
+		</div>
+
+
+		</div>
+	</div>
+</div>
+
+<div class="fw-container-full">
+	<div class="fw-background grey">
+		<div>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+	</div>
+	<div class="fw-container">
+		<div class="fw-body">
+			<div class="content">
+				<h2 class="index-callout">You're in great company</h2>
+
+				<p class="callout">Editor is used by people at these fine companies.</p>
+
+				<img src="./Editor _ Editing for DataTables_files/index-used-by.png" alt="Company logos" class="used-by">
+
+				<blockquote>
+					<h4>“This plugin saved me a great deal of time.”</h4>
+					<p>Garvin Casimir, Fmsinc</p>
+				</blockquote>
+
+				<div class="grid">
+					<div class="unit w-1-2">
+						<div class="editor-box">
+							<h3><a href="https://editor.datatables.net/generator">Generator for Editor</a> is a quick start tool that will produce everything you need to create a customised, fully editable DataTable.</h3>
+
+							<p>Simply tell it the names of the fields that you want in your table, the data types of those fields and... that's it! Generator will create a package for you that includes all of the required Javascript, HTML, SQL and server-side code (PHP, .NET/C# or NodeJS). Upload to your server and enjoy your table.</p>
+
+							<p><a class="site-btn" href="https://editor.datatables.net/generator">Get Started With Generator</a></p>
+						</div>
+					</div>
+					<div class="unit w-1-2">
+						<h3 style="padding: 0 1em;">Documentation is king!</h3>
+						<p style="padding: 0 1em;">Like <a href="https://datatables.net/">DataTables'</a>, Editor's documentation is split into two parts:</p>
+						<p class="box">
+							<strong><a href="https://editor.datatables.net/manual">Manual</a></strong><br>
+							The manual gives an overview of Editor, how to install it, how to use its various features and getting the most out of Editor.
+						</p>
+						<p class="box">
+							<strong><a href="https://editor.datatables.net/reference">Reference</a></strong><br>
+							Detailed technical documentation with every API method, initialisation option and event described in detail.
+						</p>
+						<p style="padding: 0 1em;">As developers ourselves, we know how important it is to have solid, complete and intelligible documentation. Documentation that you can count on and turn to at a moment's notice to get the answers you need.</p>
+					</div>
+				</div>
+
+				<blockquote style="margin-bottom: 0;">
+					<h4>“Your new documentation format is so good, I kind of want to reformat any documentation I've written for my own projects.”</h4>
+					<p>Charles Burns, ON Semiconductor</p>
+				</blockquote>
+
+</div>
+
+
+	
+	
+					
+
+				</div>
+			</div>
+
+			<div class="fw-page-nav static" style="">
+				<div class="page-nav" style="left: 0px; width: 130.43px;">
+					<div class="page-nav-title">Page navigation</div>
+				<ul><li class="active"><a href="https://editor.datatables.net/#top" class="active">Top</a></li><li><a href="https://editor.datatables.net/#undefined">Save time, do more</a></li><li><a href="https://editor.datatables.net/#undefined">You're in great company</a></li></ul></div>
+			</div>
+		</div>
+		
+		<div class="fw-footer">
+			<div class="skew"></div>
+			<div class="skew-bg"></div>
+			<div class="copyright">
+				<h4>DataTables</h4>
+				<p>
+					<br>
+					DataTables and Editor designed and created by <a href="https://sprymedia.co.uk/">SpryMedia Ltd</a> © 2007-2024. <a href="https://datatables.net/privacy">Privacy policy</a>.<br>
+					SpryMedia Ltd is registered in Scotland, company no. SC456502.
+				</p>
+			</div>
+		</div>
+	
+<div id="lbOverlay" style="display: none;"></div><div id="lbCenter" style="display: none;"><div id="lbImage"><div style="position: relative;"><a id="lbPrevLink" href="https://editor.datatables.net/#"></a><a id="lbNextLink" href="https://editor.datatables.net/#"></a></div></div></div><div id="lbBottomContainer" style="display: none;"><div id="lbBottom"><a id="lbCloseLink" href="https://editor.datatables.net/#"></a><div id="lbCaption"></div><div id="lbNumber"></div><div style="clear: both;"></div></div></div></body></html>
